@@ -39,6 +39,12 @@ body.dock #dock{display:flex;flex:1;width:100%;min-height:0;gap:10px;padding-bot
 .tb{touch-action:none;border:1px solid rgba(231,192,99,.55);border-radius:14px;background:#1b1430;color:#fff6d0;font:inherit;font-size:18px;padding:0 6px;min-height:48px;-webkit-tap-highlight-color:transparent}
 .tb.on{background:var(--gold);color:var(--ink)}
 #bPause{font-size:14px;min-height:36px;color:#a79fbc}
+.side{position:fixed;top:0;bottom:0;box-sizing:border-box;display:flex;flex-direction:column;touch-action:none;z-index:2}
+#sideL{left:0;align-items:center;justify-content:center;padding-left:env(safe-area-inset-left,0px);background:#100b20;color:#a79fbc;font-size:14px;writing-mode:vertical-rl;letter-spacing:.3em}
+#sideL.on{background:#1c1436;color:var(--gold)}
+#sideR{right:0;gap:1px;background:#07050f}
+#sideR .tb{flex:1;min-height:0;border:0;border-radius:0;padding:0 env(safe-area-inset-right,0px) 0 0;font-size:14px;background:#1b1430}
+#sideR .tb.on{background:var(--gold);color:var(--ink)}
 @supports (height:100dvh){html,body{height:100dvh}}
 /* 터치 기기 가로 화면: 게임이 높이를 전부 쓰도록 여백을 없앤다 */
 @media (orientation:landscape) and (pointer:coarse){
@@ -61,6 +67,12 @@ body.dock #dock{display:flex;flex:1;width:100%;min-height:0;gap:10px;padding-bot
     <button class="tb" id="bPause" type="button" hidden>일시정지</button>
   </div>
 </div></div>
+<div id="sideL" class="side" hidden>이동</div>
+<div id="sideR" class="side" hidden>
+  <button class="tb" id="sBomb" type="button">필살</button>
+  <button class="tb" id="sShot" type="button" hidden>샷</button>
+  <button class="tb" id="sSkill" type="button">기술</button>
+</div>
 <script src="js/core.js"></script>
 <script src="js/art.js"></script>
 <script src="js/art2.js"></script>

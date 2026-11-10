@@ -280,14 +280,15 @@ function render(){
   if(st==='play'&&P)drawHUD();
   if(UI[st])UI[st]();
   if(G.fade>0){u.fillStyle=`rgba(7,5,15,${G.fade/14})`;u.fillRect(0,0,W,H)}
-  if(dockOn)updateDock();
+  if(dockOn||sideOn)updateDock();
 }
 const setT=(el,t)=>{if(el.textContent!==t)el.textContent=t};
 function updateDock(){
   const play=G.state==='play';setT($('bSkill'),play?CHARS[P?P.c:0].skillName:'뒤로');setT($('bBomb'),play?'필살기':'결정');
-  $('bShot').hidden=!play||autoOn();$('bPause').hidden=!(play||G.state==='pause');
-  for(const[id,k]of[['bSkill','skill'],['bBomb','bomb'],['bShot','shot']])$(id).classList.toggle('on',T[k]!==null);
-  $('pad').classList.toggle('on',T.mv!==null);
+  setT($('sSkill'),play?'기술':'뒤로');setT($('sBomb'),play?'필살':'결정');
+  $('bShot').hidden=$('sShot').hidden=!play||autoOn();$('bPause').hidden=!(play||G.state==='pause');
+  for(const[id,k]of[['bSkill','skill'],['bBomb','bomb'],['bShot','shot'],['sSkill','skill'],['sBomb','bomb'],['sShot','shot']])$(id).classList.toggle('on',T[k]!==null);
+  $('pad').classList.toggle('on',T.mv!==null);$('sideL').classList.toggle('on',T.mv!==null);
 }
 // ── 시작 ──────────────────────────────────────────────────
 function boot(){

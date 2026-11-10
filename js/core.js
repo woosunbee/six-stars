@@ -14,7 +14,7 @@ const gc=document.getElementById('g'),g=gc.getContext('2d');
 const uc=document.getElementById('u'),u=uc.getContext('2d');
 const cab=document.getElementById('cab');
 const TOUCHDEV=!!(window.matchMedia&&matchMedia('(hover: none) and (pointer: coarse)').matches);
-let dockOn=false;
+let dockOn=false,sideOn=false;
 g.imageSmoothingEnabled=false;
 let US=1;
 function resize(){
@@ -26,7 +26,16 @@ function resize(){
   const cw=Math.floor(W*s),ch=Math.floor(H*s),dpr=Math.min(window.devicePixelRatio||1,2);
   cab.style.width=cw+'px';cab.style.height=ch+'px';
   gc.style.width=uc.style.width=cw+'px';gc.style.height=uc.style.height=ch+'px';
+  layoutSides();
   uc.width=Math.floor(cw*dpr);uc.height=Math.floor(ch*dpr);US=uc.width/W;
+}
+// 터치 가로 화면에서 게임 좌우에 남는 여백을 조작 영역으로 쓴다
+function layoutSides(){
+  const r=cab.getBoundingClientRect(),lw=Math.floor(r.left),rw=Math.floor(innerWidth-r.right);
+  sideOn=I.touch&&!dockOn&&Math.min(lw,rw)>=14;
+  const L=document.getElementById('sideL'),R=document.getElementById('sideR');
+  L.hidden=R.hidden=!sideOn;
+  if(sideOn){L.style.width=lw+'px';R.style.width=rw+'px'}
 }
 addEventListener('resize',resize);addEventListener('orientationchange',()=>setTimeout(resize,220));
 
@@ -95,7 +104,8 @@ addEventListener('pointerup',ptrUp);addEventListener('pointercancel',ptrUp);
 const $=id=>document.getElementById(id);
 function bindDock(id,k){$(id).addEventListener('pointerdown',e=>{e.preventDefault();audioInit();T[k]=e.pointerId})}
 bindDock('bSkill','skill');bindDock('bBomb','bomb');bindDock('bShot','shot');
-$('pad').addEventListener('pointerdown',e=>{e.preventDefault();audioInit();const p=toL(e);T.mv=e.pointerId;T.lx=p.x;T.ly=p.y});
+bindDock('sSkill','skill');bindDock('sBomb','bomb');bindDock('sShot','shot');
+for(const id of['pad','sideL'])$(id).addEventListener('pointerdown',e=>{e.preventDefault();audioInit();const p=toL(e);T.mv=e.pointerId;T.lx=p.x;T.ly=p.y});
 $('bPause').addEventListener('pointerdown',e=>{e.preventDefault();audioInit();if(G.state==='play')pauseGame();else if(G.state==='pause')resume()});
 uc.addEventListener('contextmenu',e=>e.preventDefault());
 const prevH={};
